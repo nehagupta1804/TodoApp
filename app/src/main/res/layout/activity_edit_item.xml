@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/mobile"
+    android:layout_height="match_parent"
+    tools:context=".Edit_item">
+    <TextView
+        android:textColor="@color/red"
+        android:textSize="40dp"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="EDIT DETAILS"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:textColor="@color/black"
+            android:background="@drawable/border"
+            android:textSize="30dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="NAME"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+       <EditText
+           android:id="@+id/name"
+           android:hint="Enter name"
+           android:background="@drawable/border"
+           android:textSize="30dp"
+           android:gravity="center"
+           android:layout_gravity="center"
+           android:layout_weight="1"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content" />
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:textColor="@color/black"
+            android:background="@drawable/border"
+            android:textSize="30dp"
+            android:text="PRICE"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:inputType="number"
+            android:id="@+id/price"
+            android:hint="Enter price"
+            android:background="@drawable/border"
+            android:textSize="30dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:textColor="@color/black"
+            android:background="@drawable/border"
+            android:textSize="30dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="CAMERA"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:id="@+id/camera"
+            android:hint="Enter camera"
+            android:background="@drawable/border"
+            android:textSize="30dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:textColor="@color/black"
+            android:background="@drawable/border"
+            android:textSize="30dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="RAM"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:id="@+id/ram"
+            android:hint="Enter RAM"
+            android:background="@drawable/border"
+            android:textSize="30dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <Button
+        android:textColor="@color/black"
+        android:onClick="saveDetails"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_weight="0.3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SAVE" />
+
+</LinearLayout>

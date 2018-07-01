@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+    <!--<LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <TextView
+        android:background="@drawable/border"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:id="@+id/expenseName"
+        android:text="name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:background="@drawable/border"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:text="100"
+        android:id="@+id/expenseAmount"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        />
+</LinearLayout>
+<LinearLayout
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <Button
+        android:layout_width="0dp"
+        android:background="@drawable/border"
+        android:focusable="false"
+        android:onClick="click_me"
+        android:id="@+id/click"
+        android:text="PICK"
+        android:layout_weight="0.2"
+        android:layout_height="wrap_content"
+        android:height="0.5dp"/>
+    <TextView
+        android:id="@+id/pick"
+        android:text="neha"
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp" />
+</LinearLayout>-->
+    <TextView
+        android:textColor="@color/red"
+        android:background="@drawable/border"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:id="@+id/expenseName"
+        android:text="name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:textColor="@color/blue"
+        android:background="@drawable/border"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:text="100"
+        android:id="@+id/expenseAmount"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        />
+    <Button
+        android:layout_width="0dp"
+        android:background="@drawable/border"
+        android:focusable="false"
+        android:onClick="click_me"
+        android:id="@+id/click"
+        android:text="PICK"
+        android:layout_weight="0.5"
+        android:layout_height="wrap_content"
+        android:height="0.5dp"/>
+
+</LinearLayout>
