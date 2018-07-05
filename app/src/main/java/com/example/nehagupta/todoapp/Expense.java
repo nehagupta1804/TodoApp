@@ -1,5 +1,7 @@
 package com.example.nehagupta.todoapp;
 
+import java.util.Date;
+
 public class Expense {
 
     public String name;
@@ -7,6 +9,15 @@ public class Expense {
     public long id;
     public String camera;
     public String ram;
+    public long date;
+
+    public long getDate() {
+        return date;
+    }
+
+    public void setDate(long date) {
+        this.date = date;
+    }
 
     public String getCamera() {
         return camera;
@@ -39,6 +50,7 @@ public class Expense {
         this.amount = amount;
         this.camera=camera;
         this.ram=ram;
+
     }
 
     public void setName(String name) {

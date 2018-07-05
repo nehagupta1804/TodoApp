@@ -12,17 +12,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class DescribeActivity extends AppCompatActivity {
 
     TextView textView1;
     TextView textView2;
     TextView textView3;
     TextView textView4;
+    TextView textView5;
     public static final int EDIT_REQUEST_CODE=900;
     public static final int EDIT_RESULT_CODE=678;
    String name;
    String amount;
-    long id;
+    long id=0;
+
 
 
     @Override
@@ -33,13 +38,25 @@ public class DescribeActivity extends AppCompatActivity {
         textView2 = findViewById(R.id.price);
         textView3 = findViewById(R.id.camera);
         textView4 = findViewById(R.id.ram);
+        textView5 = findViewById(R.id.date);
         ExpenseOpenHelper expenseOpenHelper=new ExpenseOpenHelper(this);
         SQLiteDatabase database=expenseOpenHelper.getReadableDatabase();
         Intent intent = getIntent();
-        id = intent.getLongExtra("id",0);
+        id = intent.getLongExtra("id", 0);
+
+       /* if(id == 0)
+        {
+            id=intent.getLongExtra("recieve_id",0);
+        }*/
+       /* if(intent.getStringExtra("string").equals("string")) {
+            id = intent.getLongExtra("id", 0);
+        }
+        else
+            id=  intent.getLongExtra("id_receive", 0);
+            */
         String[] selectionargs={id + ""};
-        //int amountGreaterThan =0;
-        //String[] selectionArgument={amountGreaterThan + "",};
+        //int amountGreaterThan =
+        //String[] selectionArgument={amountG0;reaterThan + "",};
         //String[] columns={Contract.Expense.COLUMN_NAME,Contract.Expense.COLUMN_AMOUNT,Contract.Expense.COLUMN_ID};
         Cursor cursor = database.query(Contract.Expense.TABLE_NAME,null,Contract.Expense.COLUMN_ID + " = ? ",selectionargs,null,null,null);
         while(cursor.moveToNext())
@@ -48,10 +65,15 @@ public class DescribeActivity extends AppCompatActivity {
             Integer amount = cursor.getInt(cursor.getColumnIndex(Contract.Expense.COLUMN_AMOUNT));
             String camera = cursor.getString(cursor.getColumnIndex(Contract.Expense.COLUMN_CAMERA));
             String ram = cursor.getString(cursor.getColumnIndex(Contract.Expense.COLUMN_RAM));
+            long date=cursor.getLong(cursor.getColumnIndex(Contract.Expense.COLUMN_DATE));
             textView1.setText(title);
             textView2.setText(amount+"");
             textView3.setText(camera);
             textView4.setText(ram);
+            Date d = new Date(date);
+            SimpleDateFormat sdf = new SimpleDateFormat();
+            String expenseDate = sdf.format(d);
+            textView5.setText(expenseDate);
             /*long id=cursor.getLong(cursor.getColumnIndex(Contract.Expense.COLUMN_ID));
             Expense expense = new Expense(title,amount);
             expense.setId(id);
@@ -116,6 +138,35 @@ public class DescribeActivity extends AppCompatActivity {
         }*/
     }
 
+   /* public void onNewIntent(Intent intent){
+
+        ExpenseOpenHelper expenseOpenHelper=new ExpenseOpenHelper(this);
+        SQLiteDatabase database=expenseOpenHelper.getReadableDatabase();
+        id = intent.getLongExtra("id", 0);
+
+        String[] selectionargs={id + ""};
+        Cursor cursor = database.query(Contract.Expense.TABLE_NAME,null,Contract.Expense.COLUMN_ID + " = ? ",selectionargs,null,null,null);
+        while(cursor.moveToNext())
+        {
+            String title = cursor.getString(cursor.getColumnIndex(Contract.Expense.COLUMN_NAME));
+            Integer amount = cursor.getInt(cursor.getColumnIndex(Contract.Expense.COLUMN_AMOUNT));
+            String camera = cursor.getString(cursor.getColumnIndex(Contract.Expense.COLUMN_CAMERA));
+            String ram = cursor.getString(cursor.getColumnIndex(Contract.Expense.COLUMN_RAM));
+            long date=cursor.getLong(cursor.getColumnIndex(Contract.Expense.COLUMN_DATE));
+            textView1.setText(title);
+            textView2.setText(amount+"");
+            textView3.setText(camera);
+            textView4.setText(ram);
+            Date d = new Date(date);
+            SimpleDateFormat sdf = new SimpleDateFormat();
+            String expenseDate = sdf.format(d);
+            textView5.setText(expenseDate);
+
+        }
+
+
+    }*/
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.edit_menu,menu);
@@ -142,11 +193,16 @@ public class DescribeActivity extends AppCompatActivity {
                         int amount = cursor.getInt(cursor.getColumnIndex(Contract.Expense.COLUMN_AMOUNT));
                         String camera = cursor.getString(cursor.getColumnIndex(Contract.Expense.COLUMN_CAMERA));
                         String ram = cursor.getString(cursor.getColumnIndex(Contract.Expense.COLUMN_RAM));
+                        long date=cursor.getLong(cursor.getColumnIndex(Contract.Expense.COLUMN_DATE));
                         //int id = cursor.getInt(cursor.getColumnIndex(Contract.Expense.COLUMN_ID));
                         textView1.setText(title);
                         textView2.setText(amount + "");
                         textView3.setText(camera);
                         textView4.setText(ram);
+                        Date d = new Date(date);
+                        SimpleDateFormat sdf = new SimpleDateFormat();
+                        String expenseDate = sdf.format(d);
+                        textView5.setText(expenseDate);
                     }
                     /*name = data.getStringExtra(Edit_item.NAME_KEY);
                     textView1.setText(name);

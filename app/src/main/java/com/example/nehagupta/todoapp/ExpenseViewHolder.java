@@ -8,6 +8,6 @@ public class ExpenseViewHolder {
 
     TextView title;
     TextView amount;
-    Button button;
+   Button btn;
     TextView pick;
 }

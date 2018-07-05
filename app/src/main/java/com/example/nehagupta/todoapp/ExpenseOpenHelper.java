@@ -18,7 +18,8 @@ public class ExpenseOpenHelper extends SQLiteOpenHelper {
 
         String expensesql =" CREATE TABLE " + Contract.Expense.TABLE_NAME + " ( " + Contract.Expense.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + Contract.Expense.COLUMN_NAME + " TEXT, " +
-                Contract.Expense.COLUMN_AMOUNT + " INTEGER, " +  Contract.Expense.COLUMN_CAMERA + " TEXT, " + Contract.Expense.COLUMN_RAM + " TEXT "  +" ) ";
+                Contract.Expense.COLUMN_AMOUNT + " INTEGER, " +  Contract.Expense.COLUMN_CAMERA + " TEXT, " + Contract.Expense.COLUMN_RAM + " TEXT, "  +
+                Contract.Expense.COLUMN_DATE + " INTEGER ) ";
         sqLiteDatabase.execSQL(expensesql);
 
 

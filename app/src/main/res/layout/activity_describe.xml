@@ -123,6 +123,34 @@
             android:layout_height="wrap_content" />
 
     </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:textColor="@color/black"
+            android:background="@drawable/border"
+            android:textSize="30dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="DATE/TIME"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:textColor="@color/black"
+            android:background="@drawable/border"
+            android:id="@+id/date"
+            android:textSize="30dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="5/10/2010 13:10"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
     <Button
         android:textColor="@color/black"
         android:onClick="onclick_back"

@@ -10,6 +10,7 @@ public class Contract {
         public static final String COLUMN_AMOUNT ="amount";
         public static final String COLUMN_RAM ="ram";
         public static final String COLUMN_CAMERA ="camera";
+        public static final String COLUMN_DATE="date";
 
     }
 }

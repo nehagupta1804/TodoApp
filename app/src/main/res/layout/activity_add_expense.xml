@@ -37,6 +37,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <Button
+        android:layout_width="wrap_content"
+        android:background="@drawable/border"
+        android:onClick="click_me"
+        android:id="@+id/click"
+        android:text="PICK   DATE/TIME"
+        android:layout_height="wrap_content" />
+    <Button
         android:onClick="startActivityResult"
         android:text="SAVE"
         android:layout_gravity="center"

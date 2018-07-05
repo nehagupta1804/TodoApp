@@ -51,33 +51,41 @@
     <TextView
         android:textColor="@color/red"
         android:background="@drawable/border"
-        android:textSize="20dp"
+        android:textSize="12dp"
         android:gravity="center"
         android:layout_weight="1"
         android:id="@+id/expenseName"
         android:text="name"
         android:layout_width="0dp"
-        android:layout_height="wrap_content" />
+        android:layout_height="50dp" />
     <TextView
         android:textColor="@color/blue"
         android:background="@drawable/border"
-        android:textSize="20dp"
+        android:textSize="12dp"
         android:gravity="center"
         android:text="100"
         android:id="@+id/expenseAmount"
         android:layout_weight="1"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
+        />
+    <TextView
+        android:textColor="@color/blue"
+        android:background="@drawable/border"
+        android:textSize="12dp"
+        android:gravity="center"
+        android:text="100"
+        android:id="@+id/pick"
+        android:layout_weight="2"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
         />
     <Button
-        android:layout_width="0dp"
-        android:background="@drawable/border"
         android:focusable="false"
-        android:onClick="click_me"
-        android:id="@+id/click"
-        android:text="PICK"
-        android:layout_weight="0.5"
-        android:layout_height="wrap_content"
-        android:height="0.5dp"/>
+        android:id="@+id/deleteButton"
+        android:text="DEL"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp" />
+
 
 </LinearLayout>

@@ -2,7 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:title="ADD" android:id="@+id/add"/>
+    <item android:title="SETTINGS">
+    <menu>
+            <item android:title="ALLOW SMS" android:id="@+id/permit"/>
+
+    </menu>
+    </item>
     <item android:title="SORT BY NAME " android:id="@+id/name"/>
     <item android:title="SORT BY AMOUNT " android:id="@+id/amount"/>
+    <item android:title="SORT BY DATE/TIME " android:id="@+id/date"/>
+    <item android:title="SEND FEEDBACK" android:id="@+id/feebback"/>
+    <item android:title="SEND ABOUT US" android:id="@+id/aboutus"/>
+    <item android:title="DIAL" android:id="@+id/dial"/>
 
 </menu>
