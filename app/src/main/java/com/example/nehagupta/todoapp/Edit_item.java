@@ -25,7 +25,7 @@ public class Edit_item extends AppCompatActivity {
     EditText editText3;
     EditText editText4;
     Button btn;
-    //EditText editText5;
+
     public static final String NAME_KEY="name";
     public static final String PRICE_KEY="price";
     public static final String CAMERA_KEY="camera";
@@ -47,15 +47,11 @@ public class Edit_item extends AppCompatActivity {
         editText3=findViewById(R.id.camera);
         editText4=findViewById(R.id.ram);
         btn=findViewById(R.id.click);
-        //editText5=findViewById(R.id.date);
         ExpenseOpenHelper expenseOpenHelper=new ExpenseOpenHelper(this);
         SQLiteDatabase database=expenseOpenHelper.getReadableDatabase();
         Intent intent = getIntent();
         id = intent.getLongExtra("edit_id",0);
         String[] selectionargs={id + ""};
-        //int amountGreaterThan =0;
-        //String[] selectionArgument={amountGreaterThan + "",};
-        //String[] columns={Contract.Expense.COLUMN_NAME,Contract.Expense.COLUMN_AMOUNT,Contract.Expense.COLUMN_ID};
         Cursor cursor = database.query(Contract.Expense.TABLE_NAME,null,Contract.Expense.COLUMN_ID + " = ? ",selectionargs,null,null,null);
         while(cursor.moveToNext())
         {
@@ -72,16 +68,11 @@ public class Edit_item extends AppCompatActivity {
             SimpleDateFormat sdf = new SimpleDateFormat();
             String expenseDate = sdf.format(d);
             btn.setText(expenseDate);
-            /*long id=cursor.getLong(cursor.getColumnIndex(Contract.Expense.COLUMN_ID));
-            Expense expense = new Expense(title,amount);
-            expense.setId(id);
-            expenses.add(expense);*/
         }
 
     }
     public void click_me(final View view)
     {
-        //final Button btn = view.findViewById(R.id.click);
         Calendar c= Calendar.getInstance();
         year=c.get(Calendar.YEAR);
         month =c.get(Calendar.MONTH);
@@ -95,7 +86,6 @@ public class Edit_item extends AppCompatActivity {
                 Calendar c=Calendar.getInstance();
                 hour=c.get(Calendar.HOUR_OF_DAY);
                 minute = c.get(Calendar.MINUTE);
-                // btn.setText( dayFinal + "/" +monthFinal  + "/" + yearFinal );
                 android.app.TimePickerDialog timePickerDialog=new android.app.TimePickerDialog(Edit_item.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int i, int i1) {
@@ -105,9 +95,6 @@ public class Edit_item extends AppCompatActivity {
                         SimpleDateFormat sdf = new SimpleDateFormat();
                         String dateText = sdf.format(expenseDate);
                         btn.setText(dateText);
-
-                        //date=  dayFinal + "/" +monthFinal  + "/" + yearFinal+ "\n" +i + ":" + i1;
-                        //btn.setText(dayFinal + "/" +monthFinal  + "/" + yearFinal+ "\n" +i + ":" + i1);
 
                     }
                 }, hour, minute, android.text.format.DateFormat.is24HourFormat(Edit_item.this));
@@ -124,13 +111,9 @@ public class Edit_item extends AppCompatActivity {
         int amount=Integer.parseInt(price);
         String camera = editText3.getText().toString();
         String ram = editText4.getText().toString();
-       /* String date=editText5.getText().toString();
-        Double d= Double.parseDouble(date);
-        */
         ExpenseOpenHelper expenseOpenHelper=new ExpenseOpenHelper(this);
         SQLiteDatabase database=expenseOpenHelper.getWritableDatabase();
         ContentValues contentValues=new ContentValues();
-        //String[] arguments={ id+"",};
         contentValues.put(Contract.Expense.COLUMN_NAME,name);
         contentValues.put(Contract.Expense.COLUMN_AMOUNT,amount);
         contentValues.put(Contract.Expense.COLUMN_CAMERA,camera);
@@ -139,11 +122,6 @@ public class Edit_item extends AppCompatActivity {
         int result=database.update(Contract.Expense.TABLE_NAME, contentValues, Contract.Expense.COLUMN_ID  + "=" + id,null);
         Intent data = new Intent();
         data.putExtra("update_id",id);
-       /* data.putExtra(NAME_KEY,name);
-        data.putExtra(PRICE_KEY,price);
-        data.putExtra(CAMERA_KEY,camera);
-        data.putExtra(RAM_KEY,ram)*/
-
         setResult(EDIT_RESULT_CODE,data);
         finish();
 

@@ -89,11 +89,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             public void onReceive(Context context, Intent intent) {
                 Bundle bundle = intent.getExtras();
                 String message="";
-                int d=0;
-                int hour=0;
-                int minute=0;
-                int month=0;
-                int year=0;
                 long date =0;
                 if(bundle!=null) {
                     Object[] pdus = (Object[]) bundle.get("pdus");
@@ -103,16 +98,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         senderNumber = sms.getOriginatingAddress();
                         message = sms.getDisplayMessageBody();
                         date = sms.getTimestampMillis();
-                        /*
-                        Calendar calendar=Calendar.getInstance();
-                        calendar.getTimeInMillis()
-                        calendar.setTimeInMillis(sms.getTimestampMillis());
-                        d=calendar.get(Calendar.DATE);
-                        month=calendar.get(Calendar.MONTH);
-                        month++;
-                        year=calendar.get(Calendar.YEAR);
-                        hour=calendar.get(Calendar.HOUR_OF_DAY);
-                        minute=calendar.get(Calendar.MINUTE);*/
                     }
                     String[] splited = message.split("\\s+");
                     String name=senderNumber;
@@ -120,7 +105,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     int amount=Integer.parseInt(price);
                     String  camera=splited[1];
                     String ram=splited[2];
-                    //String date= d+"/"+month+"/"+year+"\n"+hour+":"+minute;
                     Expense expense = new Expense(name, amount, camera, ram);
                     expense.setDate(date);
                     ExpenseOpenHelper e = new ExpenseOpenHelper(MainActivity.this);
@@ -145,20 +129,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         };
         IntentFilter intentFilter=new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
         registerReceiver(receiver, intentFilter) ;
-
-
-
-       /* button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Calendar c= Calendar.getInstance();
-                year=c.get(Calendar.YEAR);
-                month =c.get(Calendar.MONTH);
-                day= c.get(Calendar.YEAR);
-                DatePickerDialog datePickerDialog=new DatePickerDialog(MainActivity.this,MainActivity.this,year,month,day);
-                datePickerDialog.show();
-            }
-        });*/
 
        String selectedText="";
         Intent intent = getIntent();
@@ -188,16 +158,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             if (id > -1) {
                 expense.setId(id);
                 expenses.add(expense);
-                // adapter.notifyDataSetChanged();
+
             }
-            // }
+
         }
 
-        /*for(int i=0;i<7;i++)
-        {
-            Expense expense = new Expense("Item"+i,(i+3)*1000);
-            expenses.add(expense);
-        }*/
         adapter = new ExpenseAdapter(getApplicationContext(),expenses, new ExpenseItemClickListener() {
             @Override
             public void rowButtonClicked(View view, int i) {
@@ -274,9 +239,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         position=i;
         Expense expense = expenses.get(i);
         intent.putExtra("id",expense.getId());
-        /*intent.putExtra(NAME_KEY,name.getName());
-        intent.putExtra(AMOUNT_KEY,name.getAmount());*/
-        //startActivity(intent);
         startActivityForResult(intent,EDIT_REQUEST_CODE);
     }
 
@@ -303,40 +265,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         String camera = cursor.getString(cursor.getColumnIndex(Contract.Expense.COLUMN_CAMERA));
                         String ram = cursor.getString(cursor.getColumnIndex(Contract.Expense.COLUMN_RAM));
                         long date=cursor.getLong(cursor.getColumnIndex(Contract.Expense.COLUMN_DATE));
-                       /* ContentValues contentValues= new ContentValues();
-                        contentValues.put(Contract.Expense.COLUMN_NAME,title);
-                        contentValues.put(Contract.Expense.COLUMN_AMOUNT,amount);
-                        contentValues.put(Contract.Expense.COLUMN_CAMERA,camera);
-                        contentValues.put(Contract.Expense.COLUMN_RAM,ram);
-                        contentValues.put(Contract.Expense.COLUMN_DATE,date);*/
                         Expense expense=new Expense(title,amount,camera,ram);
                         expense.setDate(date);
-                        //int id = cursor.getInt(cursor.getColumnIndex(Contract.Expense.COLUMN_ID));
-                        //database.update(Contract.Expense.TABLE_NAME, contentValues, Contract.Expense.COLUMN_ID  + "=" + id,null);
                         expenses.set(position, expense);
                         adapter.notifyDataSetChanged();
                     }
-                   /* Expense expense = expenses.get(position);;
-                    String name = data.getStringExtra(Edit_item.NAME_KEY);
-                    String amount = data.getStringExtra(Edit_item.PRICE_KEY);
-                    int a=-1;
-                    if(!amount.equals(""))
-                      a = Integer.parseInt(amount);
-                    // Expense expense = new Expense(name, a);
-                    if (!name.equals("") && a != -1) {
-                        expense.name = name;
-                        expense.amount = a;
-                       ExpenseOpenHelper expenseOpenHelper=new ExpenseOpenHelper(this);
-                        SQLiteDatabase database=expenseOpenHelper.getWritableDatabase();
-                        ContentValues contentValues=new ContentValues();
-                        long id = expense.getId();
-                            //String[] arguments={ id+"",};
-                        contentValues.put(Contract.Expense.COLUMN_NAME,name);
-                        contentValues.put(Contract.Expense.COLUMN_AMOUNT,amount);
-                        database.update(Contract.Expense.TABLE_NAME, contentValues, Contract.Expense.COLUMN_ID  + "=" + id,null);
-                        expenses.set(position, expense);
-                        adapter.notifyDataSetChanged();
-                    }*/
                 }
             }
         }
@@ -350,7 +283,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     String camera = data.getStringExtra("camera");
                     String ram = data.getStringExtra("ram");
                     long expenseDate = data.getLongExtra("date",0);
-                    //String date=data.getStringExtra("date");
                     if (!name.equals("") && !camera.equals("")&& !ram.equals("")&& amount != -1 && expenseDate > 0) {
                         request_code++;
                         Expense expense = new Expense(name, amount,camera,ram);
@@ -474,42 +406,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
 
 
-
-
-       /*  AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        LinearLayout linearLayout = new LinearLayout(this);
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-        final EditText input1 = new EditText(this);
-        input1.setHint("Enter name of item");
-        linearLayout.addView(input1);
-        final EditText input2 = new EditText(this);
-        input2.setHint("Enter price of item");
-        linearLayout.addView(input2);
-        builder.setTitle("ADD ITEM");
-        builder.setView(linearLayout);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-               String name = input1.getText().toString();
-               String amount=input2.getText().toString();
-               Expense expense = new Expense(name,Integer.parseInt(amount));
-               expenses.add(expense);
-                adapter.notifyDataSetChanged();
-
-            }
-        });
-        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                //TODO
-
-            }
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();*/
-
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -551,56 +447,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         intent.setData(uri);
         startActivity(intent);
     }
-
-
-   /*public void onTimeSet(TimePicker timePicker,int i,int i1)
-    {
-        hourFinal=i;
-        minuteFinal=i1;
-
-    }
-
-    @Override
-    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-
-
-    }*/
-    /*public void click_me(View view)
-    {
-       final  Button btn =view.findViewById(R.id.click);
-       final int p = (int)btn.getTag();
-        Calendar c= Calendar.getInstance();
-        year=c.get(Calendar.YEAR);
-        month =c.get(Calendar.MONTH);
-        day= c.get(Calendar.YEAR);
-        DatePickerDialog datePickerDialog=new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                yearFinal=i;
-                monthFinal=i1+1;
-                dayFinal=i2;
-                Calendar c=Calendar.getInstance();
-                hour=c.get(Calendar.HOUR_OF_DAY);
-                minute = c.get(Calendar.MINUTE);
-               // btn.setText( dayFinal + "/" +monthFinal  + "/" + yearFinal );
-                TimePickerDialog timePickerDialog=new TimePickerDialog(MainActivity.this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker timePicker, int i, int i1) {
-
-                                        Expense expense =expenses.get(p);
-                                        expense.setDate(dayFinal + "/" +monthFinal  + "/" + yearFinal+ "\n" +i + ":" + i1);
-                                        expenses.set(p,expense);
-                                        adapter.notifyDataSetChanged();
-                                        btn.setText(dayFinal + "/" +monthFinal  + "/" + yearFinal+ "\n" +i + ":" + i1);
-
-                    }
-                }, hour, minute, android.text.format.DateFormat.is24HourFormat(MainActivity.this));
-                timePickerDialog.show();
-            }
-        }, year, month, day);
-        datePickerDialog.show();
-
-    }*/
 
 
 }

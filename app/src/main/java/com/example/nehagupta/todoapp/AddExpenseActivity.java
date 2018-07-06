@@ -55,7 +55,6 @@ public class AddExpenseActivity extends AppCompatActivity {
         data.putExtra("camera",camera1);
         data.putExtra("ram",ram1);
         data.putExtra("date",date);
-        //if(name1!=null && amount1!=null)
         setResult(ADD_RESULT_CODE,data);
         finish();
     }
@@ -78,7 +77,6 @@ public class AddExpenseActivity extends AppCompatActivity {
                 Calendar c=Calendar.getInstance();
                 hour=c.get(Calendar.HOUR_OF_DAY);
                 minute = c.get(Calendar.MINUTE);
-                // btn.setText( dayFinal + "/" +monthFinal  + "/" + yearFinal );
                 android.app.TimePickerDialog timePickerDialog=new android.app.TimePickerDialog(AddExpenseActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int i, int i1) {
@@ -88,8 +86,7 @@ public class AddExpenseActivity extends AppCompatActivity {
                         SimpleDateFormat sdf = new SimpleDateFormat();
                         String dateText = sdf.format(expenseDate);
                         btn.setText(dateText);
-                        //date=  dayFinal + "/" +monthFinal  + "/" + yearFinal+ "\n" +i + ":" + i1;
-                        //btn.setText(dayFinal + "/" +monthFinal  + "/" + yearFinal+ "\n" +i + ":" + i1);
+
 
                     }
                 }, hour, minute, android.text.format.DateFormat.is24HourFormat(AddExpenseActivity.this));

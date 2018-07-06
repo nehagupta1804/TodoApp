@@ -41,14 +41,11 @@ public class ExpenseAdapter extends ArrayAdapter {
             TextView amountTextView = output.findViewById(R.id.expenseAmount);
             TextView dateTextView =output.findViewById(R.id.pick);
             Button button = output.findViewById(R.id.deleteButton);
-
-           // TextView tv = output.findViewById(R.id.pick);
             ExpenseViewHolder viewHolder = new ExpenseViewHolder();
             viewHolder.title = nameTextView;
             viewHolder.pick=dateTextView;
             viewHolder.amount = amountTextView;
             viewHolder.btn=button;
-            //viewHolder.pick = tv;
             output.setTag(viewHolder);
         }
         ExpenseViewHolder viewHolder =(ExpenseViewHolder)output.getTag();
@@ -68,8 +65,6 @@ public class ExpenseAdapter extends ArrayAdapter {
         SimpleDateFormat sdf = new SimpleDateFormat();
         String expenseDate = sdf.format(d);
         viewHolder.pick.setText(expenseDate);
-
-       // viewHolder.pick.setText("");
         return(output);
 
     }
