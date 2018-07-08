@@ -33,30 +33,40 @@ public class AddExpenseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_expense);
+        nameEditText = findViewById(R.id.name);
+        String selectedText="";
+        Intent intent = getIntent();
+        String action=intent.getAction();
+        String type=intent.getType();
+        if(type!=null && action!=null) {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                selectedText = intent.getClipData().getItemAt(0).getText().toString();
+            }
+            nameEditText.setText(selectedText);
+        }
     }
     public void startActivityResult(View view)
     {
-        nameEditText = findViewById(R.id.name);
-        amountEditText = findViewById(R.id.amount);
+         amountEditText = findViewById(R.id.amount);
          cameraEditText= findViewById(R.id.camera);
          ramEditText=findViewById(R.id.ram);
          String name1= nameEditText.getText().toString();
-          String  amount1 = amountEditText.getText().toString();
-        String  camera1 = cameraEditText.getText().toString();
-        String  ram1 = ramEditText.getText().toString();
+         String  amount1 = amountEditText.getText().toString();
+         String  camera1 = cameraEditText.getText().toString();
+         String  ram1 = ramEditText.getText().toString();
 
           int amount = -1;
           if (!amount1.equals("")) {
               amount = Integer.parseInt(amount1);
           }
             Intent data = new Intent();
-        data.putExtra("name",name1);
-        data.putExtra("amount",amount);
-        data.putExtra("camera",camera1);
-        data.putExtra("ram",ram1);
-        data.putExtra("date",date);
-        setResult(ADD_RESULT_CODE,data);
-        finish();
+         data.putExtra("name",name1);
+         data.putExtra("amount",amount);
+         data.putExtra("camera",camera1);
+         data.putExtra("ram",ram1);
+         data.putExtra("date",date);
+         setResult(ADD_RESULT_CODE,data);
+         finish();
     }
 
 

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
+import android.app.SearchManager;
 import android.app.TimePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
@@ -21,10 +22,16 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.telephony.SmsMessage;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -67,6 +74,18 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         setContentView(R.layout.activity_main);
         listView= findViewById(R.id.list_item);
 
+        FloatingActionButton button = findViewById(R.id.fab);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(MainActivity.this,AddExpenseActivity.class);
+                startActivityForResult(intent,ADD_REQUEST_CODE);
+
+            }
+        });
+       // Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
         ExpenseOpenHelper expenseOpenHelper=new ExpenseOpenHelper(this);
         SQLiteDatabase database=expenseOpenHelper.getReadableDatabase();
         Cursor cursor =  database.query(Contract.Expense.TABLE_NAME,null,null,null,null,null,null);
@@ -130,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         IntentFilter intentFilter=new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
         registerReceiver(receiver, intentFilter) ;
 
-       String selectedText="";
+     /*  String selectedText="";
         Intent intent = getIntent();
         String action=intent.getAction();
         String type=intent.getType();
@@ -161,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
             }
 
-        }
+        }*/
 
         adapter = new ExpenseAdapter(getApplicationContext(),expenses, new ExpenseItemClickListener() {
             @Override
@@ -180,10 +199,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         long id = expense.getId();
                         String[] selectionargs = {id + ""};
                         int result = database.delete(Contract.Expense.TABLE_NAME,Contract.Expense.COLUMN_ID + " = ? ",selectionargs);
-                        if (result == 1) {
-                            expenses.remove(position);
-                            adapter.notifyDataSetChanged();
-                        }
+                        expenses.remove(position);
+                        adapter.notifyDataSetChanged();
 
                     }
                 });
@@ -205,16 +222,58 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i)  {
 
-                        Expense expense=expenses.get(position);
+                        final Expense expense=expenses.get(position);
+                        final int nextPos=position+1;
                         ExpenseOpenHelper openHelper=new ExpenseOpenHelper(MainActivity.this);
                         SQLiteDatabase database= openHelper.getWritableDatabase();
-                        long id = expense.getId();
+                        final long id = expense.getId();
                         String[] selectionargs = {id + ""};
                         int result = database.delete(Contract.Expense.TABLE_NAME,Contract.Expense.COLUMN_ID + " = ? ",selectionargs);
                         if (result == 1) {
                             expenses.remove(position);
                             adapter.notifyDataSetChanged();
                         }
+                        Snackbar.make(listView, "1 item deleted", Snackbar.LENGTH_LONG)
+                                .setAction("UNDO", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        ExpenseOpenHelper openHelper=new ExpenseOpenHelper(MainActivity.this);
+                                        SQLiteDatabase database= openHelper.getWritableDatabase();
+                                        //long id = expense.getId();
+                                        //String[] selectionargs = {id + ""};
+                                        String name=expense.getName();
+                                        int amount=expense.getAmount();
+                                        String camera=expense.getCamera();
+                                        String ram=expense.getRam();
+                                        long date=expense.getDate();
+                                        ContentValues contentValues=new ContentValues();
+                                        contentValues.put(Contract.Expense.COLUMN_ID,id);
+                                        contentValues.put(Contract.Expense.COLUMN_NAME,name);
+                                        contentValues.put(Contract.Expense.COLUMN_AMOUNT,amount);
+                                        contentValues.put(Contract.Expense.COLUMN_CAMERA,camera);
+                                        contentValues.put(Contract.Expense.COLUMN_RAM,ram);
+                                        contentValues.put(Contract.Expense.COLUMN_DATE,date);
+                                        long m=database.insert(Contract.Expense.TABLE_NAME,null,contentValues);
+                                        Expense e=new Expense(name,amount,camera,ram);
+                                        e.setDate(date);
+                                        e.setId(id);
+                                        if(position>=expenses.size())
+                                        {
+                                            expenses.add(e);
+                                        }
+                                        else {
+                                            expenses.add(e);
+                                            for(int i=expenses.size()-1;i> position;i--)
+                                            {
+
+                                                expenses.set(i,expenses.get(i-1));
+                                            }
+                                           expenses.set(position,e);
+                                        }
+                                        adapter.notifyDataSetChanged();
+                                        Toast.makeText(MainActivity.this,"Item Restored", Toast.LENGTH_LONG).show();
+                                    }
+                                }).show();
 
                     }
                 });
@@ -225,12 +284,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
                     }
                 });
+
                 AlertDialog dialog= builder.create();
                 dialog.show();
+
                 return(true);
 
             }
         });
+        int g = 8;
     }
 
     @Override
@@ -316,20 +378,24 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
+        final SearchView searchView=(SearchView)MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+        SearchManager searchManager=(SearchManager)getSystemService(SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         return true;
     }
+
 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
-        if(id==R.id.add)
+        /*if(id==R.id.add)
         {
             Intent intent = new Intent(this,AddExpenseActivity.class);
             startActivityForResult(intent,ADD_REQUEST_CODE);
-        }
-        else if(id==R.id.name)
+        }*/
+        if(id==R.id.name)
         {
             Collections.sort(expenses, new Comparator<Expense>() {
                 @Override
@@ -384,7 +450,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         else if(id==R.id.permit)
         {
 
-            if(ActivityCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS)== (PackageManager.PERMISSION_GRANTED))
+            startActivity(new Intent(this,Settings.class));
+
+           /* if(ActivityCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS)== (PackageManager.PERMISSION_GRANTED))
             {
                 Toast.makeText(this,"Permission Granted",Toast.LENGTH_LONG).show();
             }
@@ -392,7 +460,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             {
                 String[] Permissions={Manifest.permission.RECEIVE_SMS};
                 ActivityCompat.requestPermissions(this,Permissions,1);
-            }
+
+            }*/
 
         }
         else if(id==R.id.dial) {
@@ -412,7 +481,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode==2)
+       /* if(requestCode==2)
         {
             int smsGrantResult=grantResults[0];
             if(smsGrantResult==PackageManager.PERMISSION_GRANTED)
@@ -423,8 +492,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             {
                 Toast.makeText(this,"Grant Permission",Toast.LENGTH_LONG).show();
             }
-        }
-        else if(requestCode==1)
+        }*/
+        if(requestCode==1)
         {
             int callGrantResult=grantResults[0];
             if(callGrantResult==PackageManager.PERMISSION_GRANTED)

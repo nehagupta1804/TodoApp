@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.nehagupta.todoapp">
 
+    <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
@@ -12,13 +13,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+        <activity
+            android:name=".MainActivity">
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH"/>
+            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+        </activity>
+        <activity android:name=".DescribeActivity" />
+        <activity android:name=".Edit_item" />
+        <activity android:name=".AddExpenseActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
@@ -27,9 +37,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".DescribeActivity" />
-        <activity android:name=".Edit_item" />
-        <activity android:name=".AddExpenseActivity" />
 
         <receiver
             android:name=".BroadcastReceiver"
@@ -40,9 +47,7 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity
-            android:name=".Main2Activity"
-            android:label="@string/title_activity_main2"></activity>
+        <activity android:name=".Settings"></activity>
     </application>
 
 </manifest>
