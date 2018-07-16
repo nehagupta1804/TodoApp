@@ -7,13 +7,13 @@
     <item android:title="SETTINGS" android:id="@+id/permit"/>
     <item android:title="SORT BY">
         <menu>
-            <item android:title="SORT BY NAME " android:id="@+id/name"/>
-            <item android:title="SORT BY AMOUNT " android:id="@+id/amount"/>
-            <item android:title="SORT BY DATE/TIME " android:id="@+id/date"/>
+            <item android:title="NAME " android:id="@+id/name"/>
+            <item android:title="AMOUNT " android:id="@+id/amount"/>
+            <item android:title="DATE/TIME " android:id="@+id/date"/>
         </menu>
     </item>
     <item android:title="SEND FEEDBACK" android:id="@+id/feebback"/>
-    <item android:title="SEND ABOUT US" android:id="@+id/aboutus"/>
+    <item android:title="ABOUT US" android:id="@+id/aboutus"/>
     <item android:title="DIAL" android:id="@+id/dial"/>
 
 </menu>

@@ -1,7 +1,5 @@
 package com.example.nehagupta.todoapp;
 
-import java.util.Date;
-
 public class Expense {
 
     public String name;

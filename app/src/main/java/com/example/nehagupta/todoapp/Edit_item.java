@@ -6,8 +6,8 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -25,7 +25,6 @@ public class Edit_item extends AppCompatActivity {
     EditText editText3;
     EditText editText4;
     Button btn;
-
     public static final String NAME_KEY="name";
     public static final String PRICE_KEY="price";
     public static final String CAMERA_KEY="camera";

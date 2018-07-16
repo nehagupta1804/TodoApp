@@ -4,9 +4,11 @@ import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.ContentValues;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -59,14 +61,40 @@ public class AddExpenseActivity extends AppCompatActivity {
           if (!amount1.equals("")) {
               amount = Integer.parseInt(amount1);
           }
+
             Intent data = new Intent();
          data.putExtra("name",name1);
          data.putExtra("amount",amount);
          data.putExtra("camera",camera1);
          data.putExtra("ram",ram1);
          data.putExtra("date",date);
+         addExpenseToDB(data);
          setResult(ADD_RESULT_CODE,data);
          finish();
+    }
+
+    private void addExpenseToDB(Intent data) {
+        if(data!=null) {
+            String name = data.getStringExtra("name");
+            int amount = data.getIntExtra("amount", 0);
+            String camera = data.getStringExtra("camera");
+            String ram = data.getStringExtra("ram");
+            long expenseDate = data.getLongExtra("date",0);
+            if (!name.equals("") && !camera.equals("")&& !ram.equals("")&& amount != -1 && expenseDate > 0) {
+                Expense expense = new Expense(name, amount,camera,ram);
+                expense.setDate(expenseDate);
+                ExpenseOpenHelper expenseOpenHelper=new ExpenseOpenHelper(this);
+                SQLiteDatabase database=expenseOpenHelper.getWritableDatabase();
+                ContentValues contentValues=new ContentValues();
+                contentValues.put(Contract.Expense.COLUMN_NAME,expense.getName());
+                contentValues.put(Contract.Expense.COLUMN_AMOUNT,expense.getAmount());
+                contentValues.put(Contract.Expense.COLUMN_CAMERA,expense.getCamera());
+                contentValues.put(Contract.Expense.COLUMN_RAM,expense.getRam());
+                contentValues.put(Contract.Expense.COLUMN_DATE,expense.getDate());
+                long id=database.insert(Contract.Expense.TABLE_NAME,null,contentValues);
+                data.putExtra("dbresult_id", id);
+            }
+        }
     }
 
 

@@ -2,56 +2,43 @@ package com.example.nehagupta.todoapp;
 
 import android.Manifest;
 import android.app.AlarmManager;
-import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.app.SearchManager;
-import android.app.TimePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.icu.text.DateFormat;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.telephony.SmsMessage;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TimePicker;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
-import java.util.Map;
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     ArrayList<Expense> expenses = new ArrayList<>();
@@ -73,7 +60,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         listView= findViewById(R.id.list_item);
-
+        android.support.v7.widget.Toolbar toolbar =  findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         FloatingActionButton button = findViewById(R.id.fab);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,8 +72,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
             }
         });
-       // Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
+
         ExpenseOpenHelper expenseOpenHelper=new ExpenseOpenHelper(this);
         SQLiteDatabase database=expenseOpenHelper.getReadableDatabase();
         Cursor cursor =  database.query(Contract.Expense.TABLE_NAME,null,null,null,null,null,null);
@@ -102,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             expense.setId(id);
             expenses.add(expense);
         }
-
+        //SMS
         BroadcastReceiver receiver=new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -121,9 +108,20 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     String[] splited = message.split("\\s+");
                     String name=senderNumber;
                     String price=splited[0];
-                    int amount=Integer.parseInt(price);
-                    String  camera=splited[1];
-                    String ram=splited[2];
+                    int amount = 10000;
+                    String camera = "5 MP";
+                    String ram = "32 GB";
+                    try {
+                        amount = Integer.parseInt(price);
+                    } catch (NumberFormatException e) {
+                        camera = price;
+                    }
+                    if (splited.length > 1) {
+                        camera = splited[1];
+                    }
+                    if (splited.length > 2) {
+                        ram = splited[2];
+                    }
                     Expense expense = new Expense(name, amount, camera, ram);
                     expense.setDate(date);
                     ExpenseOpenHelper e = new ExpenseOpenHelper(MainActivity.this);
@@ -327,7 +325,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         String camera = cursor.getString(cursor.getColumnIndex(Contract.Expense.COLUMN_CAMERA));
                         String ram = cursor.getString(cursor.getColumnIndex(Contract.Expense.COLUMN_RAM));
                         long date=cursor.getLong(cursor.getColumnIndex(Contract.Expense.COLUMN_DATE));
+                        long id=cursor.getLong(cursor.getColumnIndex(Contract.Expense.COLUMN_ID));
                         Expense expense=new Expense(title,amount,camera,ram);
+                        expense.setId(id);
                         expense.setDate(date);
                         expenses.set(position, expense);
                         adapter.notifyDataSetChanged();
@@ -344,20 +344,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     int amount = data.getIntExtra("amount", 0);
                     String camera = data.getStringExtra("camera");
                     String ram = data.getStringExtra("ram");
+                    long id = data.getLongExtra("dbresult_id", 0);
                     long expenseDate = data.getLongExtra("date",0);
                     if (!name.equals("") && !camera.equals("")&& !ram.equals("")&& amount != -1 && expenseDate > 0) {
                         request_code++;
                         Expense expense = new Expense(name, amount,camera,ram);
                         expense.setDate(expenseDate);
-                        ExpenseOpenHelper expenseOpenHelper=new ExpenseOpenHelper(this);
-                        SQLiteDatabase database=expenseOpenHelper.getWritableDatabase();
-                        ContentValues contentValues=new ContentValues();
-                        contentValues.put(Contract.Expense.COLUMN_NAME,expense.getName());
-                        contentValues.put(Contract.Expense.COLUMN_AMOUNT,expense.getAmount());
-                        contentValues.put(Contract.Expense.COLUMN_CAMERA,expense.getCamera());
-                        contentValues.put(Contract.Expense.COLUMN_RAM,expense.getRam());
-                        contentValues.put(Contract.Expense.COLUMN_DATE,expense.getDate());
-                        long id=database.insert(Contract.Expense.TABLE_NAME,null,contentValues);
                         alarmManager=(AlarmManager) getSystemService(ALARM_SERVICE);
                         Intent intent=new Intent(this,MyReceiver.class);
                         intent.putExtra("id_alarm",id);
@@ -390,11 +382,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
-        /*if(id==R.id.add)
-        {
-            Intent intent = new Intent(this,AddExpenseActivity.class);
-            startActivityForResult(intent,ADD_REQUEST_CODE);
-        }*/
         if(id==R.id.name)
         {
             Collections.sort(expenses, new Comparator<Expense>() {
@@ -411,7 +398,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                 @Override
                 public int  compare(Expense s1, Expense s2) {
-                    //return s1.getAmount().s2.getAmount();
                     return Integer.compare(s1.getAmount(),s2.getAmount());
                 }
             });
@@ -424,7 +410,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                 @Override
                 public int  compare(Expense s1, Expense s2) {
-                    //return s1.getAmount().s2.getAmount();
                     return Long.compare(s1.getDate(),s2.getDate());
                 }
             });
@@ -452,16 +437,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
             startActivity(new Intent(this,Settings.class));
 
-           /* if(ActivityCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS)== (PackageManager.PERMISSION_GRANTED))
-            {
-                Toast.makeText(this,"Permission Granted",Toast.LENGTH_LONG).show();
-            }
-            else
-            {
-                String[] Permissions={Manifest.permission.RECEIVE_SMS};
-                ActivityCompat.requestPermissions(this,Permissions,1);
-
-            }*/
 
         }
         else if(id==R.id.dial) {
@@ -481,18 +456,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-       /* if(requestCode==2)
-        {
-            int smsGrantResult=grantResults[0];
-            if(smsGrantResult==PackageManager.PERMISSION_GRANTED)
-            {
-                call("9953247671");
-            }
-            else
-            {
-                Toast.makeText(this,"Grant Permission",Toast.LENGTH_LONG).show();
-            }
-        }*/
         if(requestCode==1)
         {
             int callGrantResult=grantResults[0];
